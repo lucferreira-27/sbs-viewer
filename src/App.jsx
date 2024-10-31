@@ -1,11 +1,6 @@
 import React from "react";
 
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import { SBSProvider } from "./contexts/SBSContext";
 
@@ -19,15 +14,16 @@ import BrowsePage from "./components/BrowsePage";
 
 function App() {
   return (
-    <Router>
-      <SBSProvider>
-        <div className="min-h-screen bg-paper text-ink">
+    <SBSProvider>
+      <BrowserRouter>
+        <div className="min-h-screen bg-gray-50">
           <Header />
-
-          <main className="py-8"></main>
+          <main className="container mx-auto py-8">
+            <Routes />
+          </main>
         </div>
-      </SBSProvider>
-    </Router>
+      </BrowserRouter>
+    </SBSProvider>
   );
 }
 

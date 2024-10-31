@@ -13,10 +13,21 @@
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "@tailwindcss/line-clamp": "^0.4.4",
+    "@tailwindcss/typography": "^0.5.15",
+    "cors": "^2.8.5",
+    "dom-to-image-more": "^3.5.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "html2canvas": "^1.4.1",
+    "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-intersection-observer": "^9.13.1",
     "react-router-dom": "^6.27.0",
-    "sbs-viewer": "file:"
+    "react-screen-capture": "^1.1.1",
+    "sbs-viewer": "file:",
+    "use-react-screenshot": "^4.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",
