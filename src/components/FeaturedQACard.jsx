@@ -22,14 +22,13 @@ function FeaturedQACard({ section, volumeNumber }) {
   return (
     <article
       className="group relative bg-white rounded-2xl overflow-hidden
-
-                      transition-all duration-300 hover:-translate-y-1 hover:shadow-xl
-
-                      border border-gray-100 min-h-[480px] flex flex-col"
+                 transition-all duration-300
+                 border border-gray-100 min-h-[480px] flex flex-col z-0
+                 shadow-[0_2px_8px_rgba(0,0,0,0.02)]"
     >
       {/* Volume Badge - Floating */}
 
-      <div className="absolute top-4 right-4 z-10">
+      <div className="absolute top-4 right-4 z-[1]">
         <div
           className="flex items-center gap-2 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full
 
@@ -47,48 +46,43 @@ function FeaturedQACard({ section, volumeNumber }) {
         </div>
       </div>
 
-      {/* Question Section */}
+      {/* Question Section - Reorganized */}
 
       <div className="relative px-6 pt-16 pb-8 bg-gradient-to-b from-accent/5 to-transparent">
         <div className="absolute top-8 left-6 w-8 h-8 bg-accent/10 rounded-full flex items-center justify-center">
           <FontAwesomeIcon icon={faQuoteLeft} className="text-accent/60" />
         </div>
 
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center">
-            <FontAwesomeIcon icon={faUser} className="text-gray-400 text-xl" />
+        {/* Question Text First */}
+
+        <p className="text-xl text-gray-900 leading-relaxed line-clamp-2 font-medium mb-4">
+          "{question?.text}"
+        </p>
+
+        {/* Author Info Below */}
+
+        <div className="flex items-center gap-2 mt-2">
+          <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
+            <FontAwesomeIcon icon={faUser} className="text-gray-400 text-sm" />
           </div>
 
-          <div>
-            <div className="flex items-center gap-2">
-              <h3 className="font-medium text-gray-700">
-                {question?.author || "Fan"}
-              </h3>
-
-              {question?.location && (
-                <span
-                  className="inline-flex items-center gap-1 text-xs text-gray-500 bg-gray-50/80 
-
-                              px-2 py-0.5 rounded-full"
-                >
+          <div className="flex items-center gap-2 text-sm text-gray-500">
+            <span className="font-medium">{question?.author || "Fan"}</span>
+            {question?.location && (
+              <>
+                <span className="text-gray-300">•</span>
+                <span className="inline-flex items-center gap-1 text-xs">
                   <FontAwesomeIcon
                     icon={faMapPin}
                     className="text-gray-400"
                     size="xs"
                   />
-
                   {question.location}
                 </span>
-              )}
-            </div>
-
-            <span className="text-xs text-gray-500">Question</span>
+              </>
+            )}
           </div>
         </div>
-
-        <p className="text-xl text-gray-900 leading-relaxed line-clamp-2 font-medium">
-          "{question?.text}"
-        </p>
       </div>
 
       {/* Oda's Response */}

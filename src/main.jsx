@@ -12,7 +12,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <SBSProvider>
       <Router>
-        <div className="min-h-screen bg-background text-ink">
+        <div className="min-h-screen bg-gradient-to-b from-paper/30 via-white to-paper/20">
           <Header />
           <main className="container mx-auto px-4 py-8">
             <Routes>

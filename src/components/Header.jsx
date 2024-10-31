@@ -1,5 +1,7 @@
 import React from "react";
+
 import VolumeSelector from "./VolumeSelector";
+
 import { Link, useLocation } from "react-router-dom";
 
 function Header() {
@@ -12,7 +14,7 @@ function Header() {
   };
 
   return (
-    <header className="bg-ink text-paper shadow-lg sticky top-0 z-10">
+    <header className="bg-ink text-paper shadow-lg sticky top-0 z-50">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row md:justify-between md:items-center py-4">
           <div className="flex items-center justify-between">
@@ -28,7 +30,9 @@ function Header() {
             <ul className="flex flex-wrap gap-2 items-center">
               {[
                 { path: "/", label: "Home" },
+
                 { path: "/search", label: "Search" },
+
                 { path: "/browse", label: "Browse" },
               ].map(({ path, label }) => (
                 <li key={path}>
@@ -42,6 +46,7 @@ function Header() {
                   </Link>
                 </li>
               ))}
+
               <li className="ml-2">
                 <VolumeSelector />
               </li>

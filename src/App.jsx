@@ -16,7 +16,7 @@ function App() {
   return (
     <SBSProvider>
       <BrowserRouter>
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen ">
           <Header />
           <main className="container mx-auto py-8">
             <Routes />
