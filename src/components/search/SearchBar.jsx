@@ -7,10 +7,10 @@ import {
   faFont,
   faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
-import { useSBS } from "../contexts/SBSContext";
+import { useSBS } from "../../contexts/SBSContext";
 import { debounce } from "lodash";
 import TagsModal from "./TagsModal";
-import { buildApiUrl } from "../config/api";
+import { buildApiUrl } from "../../config/api";
 
 function SearchBar({ isFixed = false }) {
   const {

@@ -4,13 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import { SBSProvider } from "./contexts/SBSContext";
 
-import Header from "./components/Header";
-
-import HomePage from "./components/HomePage";
-
-import SearchPage from "./components/SearchPage";
-
-import BrowsePage from "./components/BrowsePage";
+import Header from "./components/shared/Header";
 
 function App() {
   return (

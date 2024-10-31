@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import QAPair from "./QAPair";
-import { useSBS } from "../contexts/SBSContext";
+import { useSBS } from "../../contexts/SBSContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faShare,

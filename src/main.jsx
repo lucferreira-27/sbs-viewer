@@ -2,10 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { SBSProvider } from "./contexts/SBSContext";
-import Header from "./components/Header";
-import HomePage from "./components/HomePage";
-import SearchPage from "./components/SearchPage";
-import BrowsePage from "./components/BrowsePage";
+import Header from "./components/shared/Header";
+import HomePage from "./pages/HomePage";
+import SearchPage from "./pages/SearchPage";
+import BrowsePage from "./pages/BrowsePage";
 import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(

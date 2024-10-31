@@ -1,6 +1,6 @@
 import React from "react";
-import { useSBS } from "../contexts/SBSContext";
-import QAGroup from "./QAGroup";
+import { useSBS } from "../../contexts/SBSContext";
+import QAGroup from "../qa/QAGroup";
 
 function SBSContent({ searchMode = false, filterVolume = null }) {
   const { filteredData, searchTerm } = useSBS();

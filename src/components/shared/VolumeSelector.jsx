@@ -1,5 +1,5 @@
 import React from "react";
-import { useSBS } from "../contexts/SBSContext";
+import { useSBS } from "../../contexts/SBSContext";
 
 function VolumeSelector() {
   const { currentVolume, setCurrentVolume, availableVolumes } = useSBS();
