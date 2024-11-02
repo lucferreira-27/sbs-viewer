@@ -10,17 +10,48 @@ import {
   faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
 import html2canvas from "html2canvas";
+import { debug } from "../../utils/debug";
 
 function QAGroup({ qaGroup, searchMode = false, searchTerm = "" }) {
   const { currentVolume } = useSBS();
   const [isCapturing, setIsCapturing] = useState(false);
 
-  console.log("🔍 QAGroup received:", { qaGroup, searchMode, searchTerm });
+  debug.group("QAGroup", () => {
+    debug.log("QAGroup", {
+      volume: qaGroup?.volume || currentVolume,
+      "chapters count": qaGroup?.chapters?.length,
+      "has chapters": !!qaGroup?.chapters,
+      searchMode,
+      searchTerm,
+    });
+  });
 
   if (!qaGroup || !qaGroup.chapters) {
-    console.log("❌ Invalid qaGroup data:", qaGroup);
+    debug.log("QAGroup", "Invalid qaGroup data, rendering null", "warn");
     return null;
   }
+
+  const handleScreenshot = async (groupId) => {
+    debug.log("QAGroup", `Taking screenshot of ${groupId}`, "info");
+    setIsCapturing(true);
+    try {
+      // Screenshot logic here
+    } catch (error) {
+      debug.log("QAGroup", `Screenshot error: ${error.message}`, "error");
+    } finally {
+      setIsCapturing(false);
+    }
+  };
+
+  const copyLink = (groupId) => {
+    debug.log("QAGroup", `Copying link for ${groupId}`, "info");
+    // Copy link logic here
+  };
+
+  const openFandom = (volume) => {
+    debug.log("QAGroup", `Opening Fandom for volume ${volume}`, "info");
+    // Open Fandom logic here
+  };
 
   // Render each chapter's content
   return (
@@ -30,6 +61,17 @@ function QAGroup({ qaGroup, searchMode = false, searchTerm = "" }) {
         const groupId = `vol${
           qaGroup.volume || currentVolume
         }-ch${chapterNumber}-p${page}`;
+
+        debug.log(
+          "QAGroup",
+          {
+            "rendering chapter": chapterNumber,
+            page,
+            "sections count": sections?.length,
+            groupId,
+          },
+          "info"
+        );
 
         return (
           <div
@@ -109,7 +151,10 @@ function QAGroup({ qaGroup, searchMode = false, searchTerm = "" }) {
                 sections
                   .filter((section) => section && section.type === "q&a")
                   .map((section, index) => {
-                    console.log("🔖 Rendering section:", section);
+                    debug.log("QAGroup", {
+                      "rendering section": index,
+                      "section type": section?.type,
+                    });
                     return (
                       <div key={`${section.id || index}`} className="p-6">
                         <QAPair

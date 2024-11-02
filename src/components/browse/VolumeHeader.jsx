@@ -13,11 +13,13 @@ function VolumeHeader({ currentVolume }) {
         <div className="flex items-center text-gray-600 mt-1">
           <span>Volume</span>
           <FontAwesomeIcon icon={faChevronRight} className="mx-2 text-xs" />
-          <span className="font-medium text-accent">Volume {currentVolume}</span>
+          <span className="font-medium text-accent">
+            Volume {currentVolume}
+          </span>
         </div>
       </div>
     </div>
   );
 }
 
-export default VolumeHeader; 
+export default VolumeHeader;

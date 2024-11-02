@@ -1,20 +1,23 @@
 import React from "react";
 import { useSBS } from "../../contexts/SBSContext";
 import QAGroup from "../qa/QAGroup";
+import { debug } from "../../utils/debug";
 
 function SBSContent({ searchMode = false, filterVolume = null }) {
   const { filteredData, searchTerm } = useSBS();
 
-  console.log("🎯 SBSContent render:", {
-    searchMode,
-    searchTerm,
-    filteredData,
-    dataType: typeof filteredData,
-    isArray: Array.isArray(filteredData),
+  debug.group("SBSContent", () => {
+    debug.log("SBSContent", {
+      searchMode,
+      searchTerm,
+      "data type": typeof filteredData,
+      "is array": Array.isArray(filteredData),
+      "data length": filteredData?.length || 0,
+    });
   });
 
   if (!filteredData) {
-    console.log("❌ No filtered data available");
+    debug.log("SBSContent", "No filtered data available", "warn");
     return (
       <div className="text-center text-gray-500 mt-8">
         {searchTerm
@@ -29,9 +32,17 @@ function SBSContent({ searchMode = false, filterVolume = null }) {
     ? filteredData
     : Object.values(filteredData);
 
-  console.log("📊 Processed data array:", dataArray);
+  debug.log(
+    "SBSContent",
+    {
+      "processed array length": dataArray.length,
+      "first item sample": dataArray[0],
+    },
+    "info"
+  );
 
   if (dataArray.length === 0) {
+    debug.log("SBSContent", "Empty data array", "warn");
     return (
       <div className="text-center text-gray-500 mt-8">
         {searchTerm
@@ -55,12 +66,10 @@ function SBSContent({ searchMode = false, filterVolume = null }) {
                 sections: chapter.sections.filter((section) => {
                   if (!section || section.type !== "q&a") return false;
 
-                  // Search in question text
                   const questionMatch = section.question?.text
                     ?.toLowerCase()
                     .includes(searchTerm.toLowerCase());
 
-                  // Search in answer segments
                   const answerMatch = section.answer?.segments?.some(
                     (segment) =>
                       segment.type === "text" &&
@@ -76,6 +85,14 @@ function SBSContent({ searchMode = false, filterVolume = null }) {
           }))
           .filter((qaGroup) => qaGroup.chapters.length > 0)
       : dataArray;
+
+  debug.table("SBSContent", {
+    "Original Length": dataArray.length,
+    "Processed Length": processedData.length,
+    "Filter Volume": filterVolume,
+    "Search Mode": searchMode,
+    "Search Term": searchTerm,
+  });
 
   return (
     <div className="mt-8 space-y-8">

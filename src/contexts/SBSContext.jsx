@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { buildApiUrl } from "../config/api";
+import { debug } from "../utils/debug";
 
 const SBSContext = createContext();
 
@@ -7,7 +8,7 @@ export function SBSProvider({ children }) {
   const [sbs_data, setSBSData] = useState({});
   const [currentVolume, setCurrentVolume] = useState(107);
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchType, setSearchType] = useState("text"); // 'text', 'character', 'tag'
+  const [searchType, setSearchType] = useState("text");
   const [searchResults, setSearchResults] = useState(null);
   const [availableVolumes, setAvailableVolumes] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -16,40 +17,116 @@ export function SBSProvider({ children }) {
   const [loadedVolumes, setLoadedVolumes] = useState(new Set());
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-  // Log volumes response
+  // Fetch available volumes
   useEffect(() => {
+    debug.group("SBSContext", () => {
+      debug.log("SBSContext", "Fetching available volumes...", "info");
+    });
+
     fetch(buildApiUrl("/volumes"))
       .then((res) => res.json())
       .then((data) => {
-        console.log("Volumes Response:", data);
         const volumes = data.map((vol) => vol.volume);
+        debug.log(
+          "SBSContext",
+          {
+            action: "Volumes Fetched",
+            count: volumes.length,
+            volumes,
+          },
+          "success"
+        );
         setAvailableVolumes(volumes);
       })
-      .catch((err) => console.error("Error fetching volumes:", err));
+      .catch((err) => {
+        debug.log(
+          "SBSContext",
+          {
+            action: "Volumes Fetch Failed",
+            error: err.message,
+          },
+          "error"
+        );
+      });
   }, []);
 
-  // Log volume data response
+  // Fetch current volume data
   useEffect(() => {
+    debug.group("SBSContext", () => {
+      debug.log(
+        "SBSContext",
+        {
+          action: "Fetching volume data",
+          volume: currentVolume,
+        },
+        "info"
+      );
+    });
+
     fetch(buildApiUrl(`/volumes/${currentVolume}`))
       .then((res) => res.json())
       .then((data) => {
-        console.log("Volume Data Response:", data);
+        debug.log(
+          "SBSContext",
+          {
+            action: "Volume Data Fetched",
+            volume: currentVolume,
+            chaptersCount: data.chapters?.length,
+          },
+          "success"
+        );
         setSBSData((prev) => ({ ...prev, [currentVolume]: data }));
       })
-      .catch((err) => console.error("Error fetching volume data:", err));
+      .catch((err) => {
+        debug.log(
+          "SBSContext",
+          {
+            action: "Volume Data Fetch Failed",
+            volume: currentVolume,
+            error: err.message,
+          },
+          "error"
+        );
+      });
   }, [currentVolume]);
 
   // Fetch volume tags
   useEffect(() => {
     async function fetchVolumeTags() {
+      debug.log(
+        "SBSContext",
+        {
+          action: "Fetching volume tags",
+          volume: currentVolume,
+        },
+        "info"
+      );
+
       try {
         const response = await fetch(
           buildApiUrl(`/volumes/${currentVolume}/tags`)
         );
         const data = await response.json();
+        debug.log(
+          "SBSContext",
+          {
+            action: "Tags Fetched",
+            volume: currentVolume,
+            tagCount: data?.length || 0,
+          },
+          "success"
+        );
         setVolumeTags(data);
       } catch (error) {
-        console.error("Error fetching volume tags:", error);
+        debug.log(
+          "SBSContext",
+          {
+            action: "Tags Fetch Failed",
+            volume: currentVolume,
+            error: error.message,
+          },
+          "error"
+        );
       }
     }
 
@@ -58,21 +135,70 @@ export function SBSProvider({ children }) {
 
   // Fetch volume data when needed
   const fetchVolumeData = async (volumeNumber) => {
-    if (loadedVolumes.has(volumeNumber)) return;
+    if (loadedVolumes.has(volumeNumber)) {
+      debug.log(
+        "SBSContext",
+        {
+          action: "Skip Volume Load",
+          volume: volumeNumber,
+          reason: "Already loaded",
+        },
+        "info"
+      );
+      return;
+    }
 
     try {
+      debug.log(
+        "SBSContext",
+        {
+          action: "Loading Volume",
+          volume: volumeNumber,
+        },
+        "info"
+      );
+
       const response = await fetch(buildApiUrl(`/volumes/${volumeNumber}`));
       const data = await response.json();
+
+      debug.log(
+        "SBSContext",
+        {
+          action: "Volume Loaded",
+          volume: volumeNumber,
+          chaptersCount: data.chapters?.length,
+        },
+        "success"
+      );
+
       setSBSData((prev) => ({ ...prev, [volumeNumber]: data }));
       setLoadedVolumes((prev) => new Set(prev).add(volumeNumber));
     } catch (error) {
-      console.error(`Error fetching volume ${volumeNumber}:`, error);
+      debug.log(
+        "SBSContext",
+        {
+          action: "Volume Load Failed",
+          volume: volumeNumber,
+          error: error.message,
+        },
+        "error"
+      );
     }
   };
 
   // Search function
   const performSearch = async (term, type = "text") => {
-    console.log("🔍 Starting search:", { term, type });
+    debug.group("SBSContext", () => {
+      debug.log(
+        "SBSContext",
+        {
+          action: "Starting Search",
+          term,
+          type,
+        },
+        "info"
+      );
+    });
 
     if (!term) {
       setSearchResults(null);
@@ -88,7 +214,6 @@ export function SBSProvider({ children }) {
       const response = await fetch(searchUrl);
       const data = await response.json();
 
-      // Calculate search statistics
       const stats = {
         totalMatches: 0,
         volumeCount: 0,
@@ -104,6 +229,16 @@ export function SBSProvider({ children }) {
         }
       });
 
+      debug.log(
+        "SBSContext",
+        {
+          action: "Search Complete",
+          results: data.length,
+          stats,
+        },
+        "success"
+      );
+
       setSearchStats(stats);
       setSearchResults(data);
 
@@ -111,7 +246,14 @@ export function SBSProvider({ children }) {
       const firstBatchVolumes = data.slice(0, 3).map((v) => v.volume);
       await Promise.all(firstBatchVolumes.map(fetchVolumeData));
     } catch (error) {
-      console.error("🚨 Search failed:", error);
+      debug.log(
+        "SBSContext",
+        {
+          action: "Search Failed",
+          error: error.message,
+        },
+        "error"
+      );
       setSearchResults(null);
       setSearchStats(null);
     } finally {
@@ -290,6 +432,7 @@ export function SBSProvider({ children }) {
 export function useSBS() {
   const context = useContext(SBSContext);
   if (!context) {
+    debug.log("SBSContext", "useSBS called outside of SBSProvider", "error");
     throw new Error("useSBS must be used within an SBSProvider");
   }
   return context;
